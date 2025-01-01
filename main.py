@@ -11,7 +11,7 @@ import EnvWrappers
 import gym_super_mario_bros
 
 # Initialize Super Mario environment
-env = gym_super_mario_bros.make("SuperMarioBros-1-1-v0")
+env = gym_super_mario_bros.make("SuperMarioBros-1-1-v3", apply_api_compatibility=True)
 
 # Limit the action-space to
 #   0. walk right
@@ -30,7 +30,7 @@ EPISODES = 1000
 use_cuda = torch.cuda.is_available()
 print(f"Using CUDA: {use_cuda}")
 
-train = False
+train = True
 which_network = str(1)
 
 if train:
@@ -44,7 +44,7 @@ if train:
 
     for e in range(EPISODES):
 
-        state = env.reset()
+        state, info = env.reset()
         # Play the game!
         while True:
 
@@ -52,7 +52,7 @@ if train:
             action = mario.act(state)
 
             # Agent performs action
-            next_state, reward, done, info = env.step(action)
+            next_state, reward, done, truncated, info = env.step(action)
 
             # env.render()
 
