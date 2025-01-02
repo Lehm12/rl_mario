@@ -10,10 +10,15 @@ from nes_py.wrappers import JoypadSpace
 import EnvWrappers
 import gym_super_mario_bros
 
-# Initialize Super Mario environment
-env = gym_super_mario_bros.make("SuperMarioBros-1-1-v3", apply_api_compatibility=True)
+# パイパーパラメータ群
+ENV_NAME = "SuperMarioBros-1-1-v3"
+DISPLAY = True
+EPISODES = 1000
 
-# Limit the action-space to
+# Initialize Super Mario environment
+env = gym_super_mario_bros.make(ENV_NAME, render_mode='human' if DISPLAY else 'rgb_array', apply_api_compatibility=True)
+
+"""# Limit the action-space to
 #   0. walk right
 #   1. jump right
 #   2. do nothing
@@ -23,9 +28,7 @@ env = EnvWrappers.SkipFrame(env, skip=4)
 env = EnvWrappers.GrayScaleObservation(env)
 env = EnvWrappers.ResizeObservation(env, shape=84)
 env = FrameStack(env, num_stack=4)
-
-# パイパーパラメータ群
-EPISODES = 1000
+"""
 
 use_cuda = torch.cuda.is_available()
 print(f"Using CUDA: {use_cuda}")
@@ -43,6 +46,7 @@ if train:
     logger = MetricLogger.MetricLogger(save_dir)
 
     for e in range(EPISODES):
+        print(f"episode：{e+1}")
 
         state, info = env.reset()
         # Play the game!
